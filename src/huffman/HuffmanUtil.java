@@ -5,36 +5,29 @@
  */
 package huffman;
 
+import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.PriorityQueue;
-import java.util.Set;
-import java.util.TreeMap;
-import java.util.TreeSet;
 
 /**
  *
  * @author Luuk
  */
-public class Huffman {
+class HuffmanUtil {
 
-    public static Set<HuffKnoop> frequentieTekens(String input) {
+    static List<HuffKnoop> getFrequentieHuffKnoop(String data) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    public static PriorityQueue<HuffKnoop> sorteerLijst(Set<HuffKnoop> charLijst) {
+    static HashMap<Character, Integer> getFrequentie(String data) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    public static HuffKnoop maakBoom(PriorityQueue<HuffKnoop> charQueue) {
+    static List<HuffKnoop> getKoppel(List<HuffKnoop> list, int index) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    public static void leesBoom(HuffKnoop boom, String string, Map<Character, String> charCodeMap) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    public static String codeerBericht(Map<Character, String> charCodeMap, String testString) {
+    static PriorityQueue<HuffKnoop> getHuffmanBoomRij(List<HuffKnoop> frequentieHuffKnoop) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     

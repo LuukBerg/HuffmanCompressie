@@ -1,8 +1,12 @@
 package com.company;
 
+import huffman.HuffKnoop;
+import huffman.Huffman;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.Assert;
+
+
 
 import java.util.*;
 

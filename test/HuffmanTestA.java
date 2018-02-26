@@ -4,9 +4,9 @@
  * and open the template in the editor.
  */
 
+import huffman.MapFrequentie;
 import huffman.Huffman2;
 import huffman.HuffmanKnoop;
-import huffman.MapFrequentie;
 import java.util.BitSet;
 import java.util.Map;
 import org.junit.After;
@@ -20,7 +20,7 @@ import static org.junit.Assert.*;
  *
  * @author kitty
  */
-public class HuffmanTest {
+public class HuffmanTestA {
     
     Huffman2 huffman;
     MapFrequentie<Character, Integer> map1, map2, map3;
@@ -32,7 +32,7 @@ public class HuffmanTest {
     String bericht1codeerd, bericht2codeerd;
     Map<Character, Integer> ltf1, ltf2;
     
-    public HuffmanTest() {
+    public HuffmanTestA() {
     }
     
     @BeforeClass

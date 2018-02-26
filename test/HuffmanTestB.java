@@ -20,7 +20,7 @@ import static org.junit.Assert.*;
  *
  * @author kitty
  */
-public class HuffmanTest {
+public class HuffmanTestB{
     
     Huffman2 huffman;
     MapFrequentie<Character, Integer> map1, map2, map3;
@@ -32,7 +32,7 @@ public class HuffmanTest {
     String bericht1codeerd, bericht2codeerd;
     Map<Character, Integer> ltf1, ltf2;
     
-    public HuffmanTest() {
+    public HuffmanTestB() {
     }
     
     @BeforeClass

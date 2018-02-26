@@ -90,6 +90,7 @@ public class HuffmanKnoopUtilTest {
         PriorityQueue<HuffKnoop> priorityFrequentie = HuffmanKnoopUtil.getPriorityFrequentie(frequenties);
         HuffKnoop h = HuffmanKnoopUtil.getHuffmanBoom(priorityFrequentie);
         assertNotNull(h);
+        assertEquals('n', h.karakter);
         assertEquals('n',h.leftChild.karakter);
         assertEquals('a',h.rightChild.rightChild.karakter);
         assertEquals('e',h.rightChild.leftChild.rightChild.karakter);
