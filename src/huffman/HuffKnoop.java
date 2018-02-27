@@ -19,7 +19,8 @@ public class HuffKnoop {
     public int frequentie;
     public HuffKnoop leftChild;
     public HuffKnoop rightChild;
-    public boolean done;
+    
+    
     public HuffKnoop(Character karakter, int frequentie) {
         this.karakter = karakter;
         this.frequentie = frequentie;
@@ -30,7 +31,14 @@ public class HuffKnoop {
         leftChild = left;
         rightChild = right;
     }
-
+    public boolean isleaf(){
+        if(leftChild == null && rightChild == null){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
 
 
     public String getDecodeerMessage(String code, StringBuilder sb, HuffKnoop boom) {

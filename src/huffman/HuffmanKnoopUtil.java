@@ -64,31 +64,27 @@ public class HuffmanKnoopUtil {
         return priorityFrequentie.remove();
     }
 
-    public static HashMap<Character, String> getHuffknoopcode(HuffKnoop h, String encodeString, HashMap<Character, String> hashMap) {
+    public static HashMap<Character, String> getHuffknoopcode(HuffKnoop h) {
         HuffKnoop currentKnoop = h;
-        while(!h.rightChild.done){
-            if(currentKnoop.leftChild != null && !currentKnoop.leftChild.done){
-                encodeString += "0";
-                currentKnoop = currentKnoop.leftChild;
-            }
-            else if(currentKnoop.rightChild != null && !currentKnoop.rightChild.done){
-                encodeString += "1";
-                currentKnoop = currentKnoop.rightChild;
-            }
-            else if(currentKnoop.rightChild != null && currentKnoop.leftChild != null&& currentKnoop.rightChild.done && currentKnoop.leftChild.done){
-                currentKnoop.done = true;
-                encodeString = "";
-                currentKnoop = h; 
-            }
-            else{
-                hashMap.put(currentKnoop.karakter, encodeString);
-                encodeString = "";
-                currentKnoop.done = true;
-                currentKnoop = h;
-            }
-        }
-        
+        HashMap hashMap = new HashMap<>();
+        findBitcode(h, hashMap, "");
         return hashMap;
+    }
+    public static String findBitcode(HuffKnoop current, HashMap<Character, String> hashMap, String currentString){
+         // See if target immediately available
+        if(current.isleaf()){
+            hashMap.put(current.karakter,currentString);
+            return currentString.substring(0, currentString.length() -1);
+        }
+        else{
+        // Search deeper
+        currentString = findBitcode(current.leftChild, hashMap, currentString += "0");
+        
+        currentString = findBitcode(current.rightChild, hashMap, currentString += "1");
+
+        }
+        //not found
+        return "";
     }
     static String getHuffmanCode(String data, HashMap<Character, String> characterCodes) {
         StringBuilder bld = new StringBuilder();
