@@ -19,6 +19,7 @@ public class HuffKnoop {
     public int frequentie;
     public HuffKnoop leftChild;
     public HuffKnoop rightChild;
+    public boolean done;
     public HuffKnoop(Character karakter, int frequentie) {
         this.karakter = karakter;
         this.frequentie = frequentie;

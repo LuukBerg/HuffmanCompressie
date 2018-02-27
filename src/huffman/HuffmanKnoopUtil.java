@@ -60,28 +60,77 @@ public class HuffmanKnoopUtil {
              HuffKnoop add;
              add = new HuffKnoop(hleft.karakter, hleft.frequentie + hright.frequentie, hleft, hright);
              priorityFrequentie.add(add);
-             System.out.println(add);
         }
         return priorityFrequentie.remove();
     }
 
-    static HashMap<Character, String> getHuffknoopcode(HuffKnoop h, String string, HashMap<Object, Object> hashMap) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public static HashMap<Character, String> getHuffknoopcode(HuffKnoop h, String encodeString, HashMap<Character, String> hashMap) {
+        HuffKnoop currentKnoop = h;
+        while(!h.rightChild.done){
+            if(currentKnoop.leftChild != null && !currentKnoop.leftChild.done){
+                encodeString += "0";
+                currentKnoop = currentKnoop.leftChild;
+            }
+            else if(currentKnoop.rightChild != null && !currentKnoop.rightChild.done){
+                encodeString += "1";
+                currentKnoop = currentKnoop.rightChild;
+            }
+            else if(currentKnoop.rightChild != null && currentKnoop.leftChild != null&& currentKnoop.rightChild.done && currentKnoop.leftChild.done){
+                currentKnoop.done = true;
+                encodeString = "";
+                currentKnoop = h; 
+            }
+            else{
+                hashMap.put(currentKnoop.karakter, encodeString);
+                encodeString = "";
+                currentKnoop.done = true;
+                currentKnoop = h;
+            }
+        }
+        
+        return hashMap;
     }
-    
-    static private LinkedList<HashMap.Entry<Character, Integer>> sortByValue(Map<Character, Integer> unsorted) {
-        //maakt een linkedList aan van de unsorted map
-        LinkedList<HashMap.Entry<Character, Integer>> list = new LinkedList<>(unsorted.entrySet());
-        //sorteerd de list door de values te comparen
-        list.sort(Comparator.comparing(Map.Entry::getValue));
-        return list;
-    }
-
     static String getHuffmanCode(String data, HashMap<Character, String> characterCodes) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        StringBuilder bld = new StringBuilder();
+        char[] charArray = data.toCharArray();
+        for(char karakter : charArray){
+            bld.append(characterCodes.get(karakter));
+        }
+        return bld.toString();
     }
 
     static String getHuffmanDecode(String input, HuffKnoop h) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        char[] charArray = input.toCharArray();
+        StringBuilder bld = new StringBuilder();
+        HuffKnoop currentKnoop = h;
+        boolean done = false;
+        int counter = 0;
+        while(!done){
+            if(charArray[counter]  == '0'){
+                if(currentKnoop.leftChild != null){
+                    currentKnoop = currentKnoop.leftChild;
+                    counter++;
+                }
+                else{
+                    bld.append(currentKnoop.karakter);
+                    currentKnoop = h;
+                }
+            }
+            else if(charArray[counter] == '1'){
+                if(currentKnoop.rightChild != null){
+                    currentKnoop = currentKnoop.rightChild;
+                    counter++;
+                }
+                else{
+                    bld.append(currentKnoop.karakter);
+                    currentKnoop = h;
+                }
+            }
+            if(counter == charArray.length){
+                done = true;
+                bld.append(currentKnoop.karakter);
+            }
+        }
+        return bld.toString();
     }
 }
