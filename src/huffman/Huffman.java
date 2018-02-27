@@ -5,12 +5,9 @@
  */
 package huffman;
 
-import java.util.List;
-import java.util.Map;
+import java.util.BitSet;
+import java.util.HashMap;
 import java.util.PriorityQueue;
-import java.util.Set;
-import java.util.TreeMap;
-import java.util.TreeSet;
 
 /**
  *
@@ -18,24 +15,108 @@ import java.util.TreeSet;
  */
 public class Huffman {
 
-    public static Set<HuffKnoop> frequentieTekens(String input) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public static HashMap<Character, Integer> getFrequentie(String data) {
+       //split de input naar een char array
+       char[] characters = data.toCharArray();
+       //maakt nieuwe TreeMap<Character, Integer> aan om unique woorden in op te slaan met de hoeveelheid van dat woord
+       HashMap<Character, Integer> map = new HashMap();
+       for(Character c: characters){
+           //kijkt of het woord nog niet bestaat zo niet wordt deze erin gezet met de hoeveelheid 1
+           if(!map.containsKey(c)){
+               map.put(c, 1);
+           }
+           //als het woord wel al bestaat wordt deze gereplaced met hetzelfde woord maar wordt er 1 bij de hoeveelheid opgeteld
+           else{
+               map.replace(c, map.get(c) + 1);
+           }
+       }
+       return map;
+       
     }
 
-    public static PriorityQueue<HuffKnoop> sorteerLijst(Set<HuffKnoop> charLijst) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    //Frequentie maar dan gesorteerd
+    public static PriorityQueue<HuffKnoop> getPriorityFrequentie(HashMap<Character, Integer> frequenties) {
+        PriorityQueue<HuffKnoop> priorityQueue = new PriorityQueue<>(frequenties.size(),new PriorityComparator());
+        for(HashMap.Entry<Character, Integer> e : frequenties.entrySet()) {
+            HuffKnoop k = new HuffKnoop(e.getKey(), e.getValue());
+            priorityQueue.offer(k);
+        }
+        return priorityQueue;
+        
     }
 
-    public static HuffKnoop maakBoom(PriorityQueue<HuffKnoop> charQueue) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public static HuffKnoop getHuffmanBoom(PriorityQueue<HuffKnoop> priorityFrequentie) {
+        HuffKnoop hleft;
+        HuffKnoop hright;
+        while(priorityFrequentie.size() > 1){
+            hleft = priorityFrequentie.remove();
+            hright = priorityFrequentie.remove();
+            priorityFrequentie.add(new HuffKnoop(hleft.karakter, hleft.frequentie + hright.frequentie, hleft, hright));
+        }
+        return priorityFrequentie.remove();
     }
 
-    public static void leesBoom(HuffKnoop boom, String string, Map<Character, String> charCodeMap) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public static HashMap<Character, String> Huffknoopcode(HuffKnoop h) {
+        HashMap hashMap = new HashMap<>();
+        findBitcode(h, hashMap, "");
+        return hashMap;
+    }
+    private static void findBitcode(HuffKnoop current, HashMap<Character, String> hashMap, String currentString){
+         // See if target immediately available
+       if(!current.isleaf()){
+           findBitcode(current.leftChild,hashMap, currentString + '0');
+           findBitcode(current.rightChild,hashMap, currentString + '1');
+       }
+       else{
+           hashMap.put(current.karakter, currentString);
+       }
+    }
+   /* static String getHuffmanCode(String data, HashMap<Character, String> characterCodes) {
+        StringBuilder bld = new StringBuilder();
+        char[] charArray = data.toCharArray();
+        for(char karakter : charArray){
+            bld.append(characterCodes.get(karakter));
+        }
+        return bld.toString();
+    }
+*/
+    public static BitSet getHuffmanEncode(String data, HashMap<Character, String> characterCodes) {
+        BitSet bits = new BitSet();
+        int counter = 0;
+        for(char karakter : data.toCharArray()){
+            String coded = (characterCodes.get(karakter));
+            for(char bit : coded.toCharArray()){
+                if(bit == '0')bits.set(counter, false);
+                else bits.set(counter,true);
+                counter++;
+            }
+        }
+        return bits;
     }
 
-    public static String codeerBericht(Map<Character, String> charCodeMap, String testString) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public static String getHuffmanDecode(String input, HuffKnoop h) {
+        StringBuilder bld = new StringBuilder();
+        HuffKnoop currentKnoop = h;
+        for(char kar : input.toCharArray()){
+            if(kar  == '0'){
+                if(currentKnoop.leftChild != null){
+                    currentKnoop = currentKnoop.leftChild;
+                    if(currentKnoop.leftChild == null){
+                        bld.append(currentKnoop.karakter);
+                        currentKnoop = h;
+                    }
+                }
+            }
+            else if(kar == '1'){
+                if(currentKnoop.rightChild != null){
+                    currentKnoop = currentKnoop.rightChild;
+                    if(currentKnoop.rightChild == null){
+                        bld.append(currentKnoop.karakter);
+                        currentKnoop = h;
+                    }
+                }
+            }
+        }
+        return bld.toString();
     }
-    
 }

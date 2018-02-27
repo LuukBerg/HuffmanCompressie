@@ -5,6 +5,7 @@
  */
 package huffman;
 
+import java.util.BitSet;
 import java.util.HashMap;
 import java.util.PriorityQueue;
 import org.junit.After;
@@ -18,11 +19,11 @@ import static org.junit.Assert.*;
  *
  * @author Brian
  */
-public class HuffmanKnoopUtilTest {
+public class HuffmanTest {
     public String data;
     public String data2;
     
-    public HuffmanKnoopUtilTest() {
+    public HuffmanTest() {
     }
     
     @BeforeClass
@@ -57,15 +58,15 @@ public class HuffmanKnoopUtilTest {
         expResult.put('b',1);
         expResult.put('e',1);        
         
-        HashMap<Character, Integer> result = HuffmanKnoopUtil.getFrequentie(data);
+        HashMap<Character, Integer> result = Huffman.getFrequentie(data);
         assertEquals(expResult,result);
     }
     
     @Test
     public void testGetPriorityFrequentie()
     {
-        HashMap<Character, Integer> frequenties = HuffmanKnoopUtil.getFrequentie(data);
-        PriorityQueue<HuffKnoop> priorityFrequentie = HuffmanKnoopUtil.getPriorityFrequentie(frequenties);
+        HashMap<Character, Integer> frequenties = Huffman.getFrequentie(data);
+        PriorityQueue<HuffKnoop> priorityFrequentie = Huffman.getPriorityFrequentie(frequenties);
 
         HuffKnoop h;
         h = priorityFrequentie.remove();
@@ -86,59 +87,65 @@ public class HuffmanKnoopUtilTest {
     @Test
     public void testGetHuffmanBoom()
     {
-        HashMap<Character, Integer> frequenties = HuffmanKnoopUtil.getFrequentie(data);
-        PriorityQueue<HuffKnoop> priorityFrequentie = HuffmanKnoopUtil.getPriorityFrequentie(frequenties);
-        HuffKnoop h = HuffmanKnoopUtil.getHuffmanBoom(priorityFrequentie);
+        HashMap<Character, Integer> frequenties = Huffman.getFrequentie(data);
+        PriorityQueue<HuffKnoop> priorityFrequentie = Huffman.getPriorityFrequentie(frequenties);
+        HuffKnoop h = Huffman.getHuffmanBoom(priorityFrequentie);
         assertNotNull(h);
         assertEquals('n', h.karakter);
         assertEquals('n',h.leftChild.karakter);
-        assertEquals('a',h.rightChild.rightChild.karakter);
-        assertEquals('e',h.rightChild.leftChild.rightChild.karakter);
-        assertEquals('b',h.rightChild.leftChild.leftChild.karakter);
+        assertEquals('a',h.rightChild.leftChild.karakter);
+        assertEquals('e',h.rightChild.rightChild.rightChild.karakter);
+        assertEquals('b',h.rightChild.rightChild.leftChild.karakter);
     }
     
     @Test
     public void testGetCharacterCode()
     {
-        HashMap<Character, Integer> frequenties = HuffmanKnoopUtil.getFrequentie(data);
-        PriorityQueue<HuffKnoop> priorityFrequentie = HuffmanKnoopUtil.getPriorityFrequentie(frequenties);
-        HuffKnoop h = HuffmanKnoopUtil.getHuffmanBoom(priorityFrequentie);
+        HashMap<Character, Integer> frequenties = Huffman.getFrequentie(data);
+        PriorityQueue<HuffKnoop> priorityFrequentie = Huffman.getPriorityFrequentie(frequenties);
+        HuffKnoop h = Huffman.getHuffmanBoom(priorityFrequentie);
         
         HashMap<Character, String> expResult =  new HashMap<>();
         expResult.put('n', "0");
-        expResult.put('b', "100");
-        expResult.put('e', "101");
-        expResult.put('a', "11");
+        expResult.put('b', "110");
+        expResult.put('e', "111");
+        expResult.put('a', "10");
         
-        HashMap<Character,String> result = HuffmanKnoopUtil.getHuffknoopcode(h,"",new HashMap<>());
+        HashMap<Character,String> result = Huffman.Huffknoopcode(h);
         assertEquals(expResult,result);
     }
     
     @Test
     public void testGetCodedKnoop()
     {
-        HashMap<Character, Integer> frequenties = HuffmanKnoopUtil.getFrequentie(data);
-        PriorityQueue<HuffKnoop> priorityFrequentie = HuffmanKnoopUtil.getPriorityFrequentie(frequenties);
-        HuffKnoop h = HuffmanKnoopUtil.getHuffmanBoom(priorityFrequentie);
-        HashMap<Character,String> characterCodes = HuffmanKnoopUtil.getHuffknoopcode(h,"",new HashMap<>());
-        
-        
-        String expResult = "1001101101010";
-        String result = HuffmanKnoopUtil.getHuffmanCode(data, characterCodes);
+        HashMap<Character, Integer> frequenties = Huffman.getFrequentie(data);
+        PriorityQueue<HuffKnoop> priorityFrequentie = Huffman.getPriorityFrequentie(frequenties);
+        HuffKnoop h = Huffman.getHuffmanBoom(priorityFrequentie);
+        HashMap<Character,String> characterCodes = Huffman.Huffknoopcode(h);
+        String ResultString = "1101001001110";
+        BitSet expResult = new BitSet();
+        int counter = 0;
+        for (char bit : ResultString.toCharArray()) {
+            if (bit == '0') {
+                expResult.set(counter, false);
+            } else {
+                expResult.set(counter, true);
+            }
+            counter++;
+        }
+        BitSet result = Huffman.getHuffmanEncode(data, characterCodes);
         assertEquals(expResult,result);
-        
     }
     
     @Test
     public void testGetDecodedKnoop()
     {
-        HashMap<Character, Integer> frequenties = HuffmanKnoopUtil.getFrequentie(data);
-        PriorityQueue<HuffKnoop> priorityFrequentie = HuffmanKnoopUtil.getPriorityFrequentie(frequenties);
-        HuffKnoop h = HuffmanKnoopUtil.getHuffmanBoom(priorityFrequentie);
-
-       String input = "1001101101010";
+       HashMap<Character, Integer> frequenties = Huffman.getFrequentie(data);
+       PriorityQueue<HuffKnoop> priorityFrequentie = Huffman.getPriorityFrequentie(frequenties);
+       HuffKnoop h = Huffman.getHuffmanBoom(priorityFrequentie);
+       String input = "1101001001110";
        String expResult = "bananen";
-       String result = HuffmanKnoopUtil.getHuffmanDecode(input, h);
+       String result = Huffman.getHuffmanDecode(input, h);
        assertEquals(expResult,result);
     }
 }

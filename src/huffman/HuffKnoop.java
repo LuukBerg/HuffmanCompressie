@@ -20,7 +20,6 @@ public class HuffKnoop {
     public HuffKnoop leftChild;
     public HuffKnoop rightChild;
     
-    
     public HuffKnoop(Character karakter, int frequentie) {
         this.karakter = karakter;
         this.frequentie = frequentie;
@@ -38,11 +37,6 @@ public class HuffKnoop {
         else{
             return false;
         }
-    }
-
-
-    public String getDecodeerMessage(String code, StringBuilder sb, HuffKnoop boom) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
 }
