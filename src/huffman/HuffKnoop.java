@@ -13,32 +13,29 @@ import java.io.Serializable;
  */
 public class HuffKnoop implements Serializable {
 
-    static HuffKnoop create(char c, int i) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-    
+
     public char karakter;
     public int frequentie;
     public HuffKnoop leftChild;
     public HuffKnoop rightChild;
-    
+
     public HuffKnoop(Character karakter, int frequentie) {
         this.karakter = karakter;
         this.frequentie = frequentie;
     }
+
     public HuffKnoop(Character karakter, int frequentie, HuffKnoop left, HuffKnoop right) {
         this.karakter = karakter;
         this.frequentie = frequentie;
         leftChild = left;
         rightChild = right;
     }
-    public boolean isleaf(){
-        if(leftChild == null && rightChild == null){
-            return true;
-        }
-        else{
-            return false;
-        }
+    /**
+    * looks if the current HuffKnoop is a leaf
+    * @return true if leaf. false if not.
+    */
+    public boolean isleaf() {
+        return leftChild == null && rightChild == null;
     }
-    
+
 }

@@ -15,6 +15,12 @@ import java.util.PriorityQueue;
  */
 public class Huffman {
 
+    
+    /**
+    * gets the priorityQueue from a HashMap
+    * @param data data to get Hashmap from
+    * @return Hashmap with the Character and the frequentie
+    */
     public static HashMap<Character, Integer> getFrequentie(String data) {
        //split de input naar een char array
        char[] characters = data.toCharArray();
@@ -34,17 +40,24 @@ public class Huffman {
        
     }
 
-    //Frequentie maar dan gesorteerd
+    /**
+    * gets the priorityQueue from a HashMap
+    * @param frequenties
+    * @return PriorityQueue
+    */
     public static PriorityQueue<HuffKnoop> getPriorityFrequentie(HashMap<Character, Integer> frequenties) {
         PriorityQueue<HuffKnoop> priorityQueue = new PriorityQueue<>(frequenties.size(),new PriorityComparator());
-        for(HashMap.Entry<Character, Integer> e : frequenties.entrySet()) {
-            HuffKnoop k = new HuffKnoop(e.getKey(), e.getValue());
+        frequenties.entrySet().stream().map((e) -> new HuffKnoop(e.getKey(), e.getValue())).forEachOrdered((k) -> {
             priorityQueue.offer(k);
-        }
+        });
         return priorityQueue;
         
     }
-
+    /**
+    * gets the HuffMan tree
+    * @param priorityFrequentie
+    * @return Huffman Tree
+    */
     public static HuffKnoop getHuffmanBoom(PriorityQueue<HuffKnoop> priorityFrequentie) {
         HuffKnoop hleft;
         HuffKnoop hright;
@@ -55,12 +68,23 @@ public class Huffman {
         }
         return priorityFrequentie.remove();
     }
-
+    /**
+    * Gets code from HuffMan Tree
+    * @param h Tree to get codes from
+    * @return HashMap with <character, CharacterCode>
+    */
     public static HashMap<Character, String> Huffknoopcode(HuffKnoop h) {
         HashMap hashMap = new HashMap<>();
         findBitcode(h, hashMap, "");
         return hashMap;
     }
+    
+    /**
+    * Recursive method that will find the code in the trees looping through them until it reaches a leaf. When leaf is reached it'll add it to the HashMap
+    * @param current HuffManKnoop to find the codes of 
+    * @param hashMap Map to add Codes to
+    * @param currentString empty string on first call. Is used for calling itself.
+    */
     private static void findBitcode(HuffKnoop current, HashMap<Character, String> hashMap, String currentString){
          // See if target immediately available
        if(!current.isleaf()){
@@ -71,15 +95,12 @@ public class Huffman {
            hashMap.put(current.karakter, currentString);
        }
     }
-   /* static String getHuffmanCode(String data, HashMap<Character, String> characterCodes) {
-        StringBuilder bld = new StringBuilder();
-        char[] charArray = data.toCharArray();
-        for(char karakter : charArray){
-            bld.append(characterCodes.get(karakter));
-        }
-        return bld.toString();
-    }
-*/
+    /**
+    * Decodes encoded input using HuffMan Tree
+    * @param data String to encode
+    * @param characterCodes HashMap with Character codes
+    * @return encoded String
+    */
     public static BitSet getHuffmanEncode(String data, HashMap<Character, String> characterCodes) {
         BitSet bits = new BitSet();
         int counter = 0;
@@ -94,10 +115,19 @@ public class Huffman {
         return bits;
     }
 
+    /**
+    * Decodes encoded input using HuffMan Tree
+    * @param input encoded input
+    * @param h HuffMan Tree
+    * @return decoded String
+    */
     public static String getHuffmanDecode(BitSet input, HuffKnoop h) {
         StringBuilder bld = new StringBuilder();
         HuffKnoop currentKnoop = h;
+        
+        //loops through every bit in input going through the tree.
         for (int i = 0; i <= input.length(); i++) {
+            //if the bit is 0 then it look through the left child to see if it's a leaf. if so it uses that character, otherwise it'll use that left child as new currentKnoop
             if(!input.get(i)){
                 if(currentKnoop.leftChild != null){
                     currentKnoop = currentKnoop.leftChild;
