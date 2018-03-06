@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>Huffman.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JaCoCoverage analysis of project &quot;Huffman&quot; (powered by JaCoCo from EclEmma)</a> &gt; <a href="index.source.html" class="el_package">huffman</a> &gt; <span class="el_source">Huffman.java</span></div><h1>Huffman.java</h1><pre class="source lang-java linenums">/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package huffman;
+
+import java.util.BitSet;
+import java.util.HashMap;
+import java.util.PriorityQueue;
+
+/**
+ *
+ * @author Luuk
+ */
+<span class="nc" id="L16">public class Huffman {</span>
+
+    public static HashMap&lt;Character, Integer&gt; getFrequentie(String data) {
+       //split de input naar een char array
+<span class="fc" id="L20">       char[] characters = data.toCharArray();</span>
+       //maakt nieuwe TreeMap&lt;Character, Integer&gt; aan om unique woorden in op te slaan met de hoeveelheid van dat woord
+<span class="fc" id="L22">       HashMap&lt;Character, Integer&gt; map = new HashMap();</span>
+<span class="fc bfc" id="L23" title="All 2 branches covered.">       for(Character c: characters){</span>
+           //kijkt of het woord nog niet bestaat zo niet wordt deze erin gezet met de hoeveelheid 1
+<span class="fc bfc" id="L25" title="All 2 branches covered.">           if(!map.containsKey(c)){</span>
+<span class="fc" id="L26">               map.put(c, 1);</span>
+           }
+           //als het woord wel al bestaat wordt deze gereplaced met hetzelfde woord maar wordt er 1 bij de hoeveelheid opgeteld
+           else{
+<span class="fc" id="L30">               map.replace(c, map.get(c) + 1);</span>
+           }
+       }
+<span class="fc" id="L33">       return map;</span>
+       
+    }
+
+    //Frequentie maar dan gesorteerd
+    public static PriorityQueue&lt;HuffKnoop&gt; getPriorityFrequentie(HashMap&lt;Character, Integer&gt; frequenties) {
+<span class="fc" id="L39">        PriorityQueue&lt;HuffKnoop&gt; priorityQueue = new PriorityQueue&lt;&gt;(frequenties.size(),new PriorityComparator());</span>
+<span class="fc bfc" id="L40" title="All 2 branches covered.">        for(HashMap.Entry&lt;Character, Integer&gt; e : frequenties.entrySet()) {</span>
+<span class="fc" id="L41">            HuffKnoop k = new HuffKnoop(e.getKey(), e.getValue());</span>
+<span class="fc" id="L42">            priorityQueue.offer(k);</span>
+<span class="fc" id="L43">        }</span>
+<span class="fc" id="L44">        return priorityQueue;</span>
+        
+    }
+
+    public static HuffKnoop getHuffmanBoom(PriorityQueue&lt;HuffKnoop&gt; priorityFrequentie) {
+        HuffKnoop hleft;
+        HuffKnoop hright;
+<span class="fc bfc" id="L51" title="All 2 branches covered.">        while(priorityFrequentie.size() &gt; 1){</span>
+<span class="fc" id="L52">            hleft = priorityFrequentie.remove();</span>
+<span class="fc" id="L53">            hright = priorityFrequentie.remove();</span>
+<span class="fc" id="L54">            priorityFrequentie.add(new HuffKnoop(hleft.karakter, hleft.frequentie + hright.frequentie, hleft, hright));</span>
+        }
+<span class="fc" id="L56">        return priorityFrequentie.remove();</span>
+    }
+
+    public static HashMap&lt;Character, String&gt; Huffknoopcode(HuffKnoop h) {
+<span class="fc" id="L60">        HashMap hashMap = new HashMap&lt;&gt;();</span>
+<span class="fc" id="L61">        findBitcode(h, hashMap, &quot;&quot;);</span>
+<span class="fc" id="L62">        return hashMap;</span>
+    }
+    private static void findBitcode(HuffKnoop current, HashMap&lt;Character, String&gt; hashMap, String currentString){
+         // See if target immediately available
+<span class="fc bfc" id="L66" title="All 2 branches covered.">       if(!current.isleaf()){</span>
+<span class="fc" id="L67">           findBitcode(current.leftChild,hashMap, currentString + '0');</span>
+<span class="fc" id="L68">           findBitcode(current.rightChild,hashMap, currentString + '1');</span>
+       }
+       else{
+<span class="fc" id="L71">           hashMap.put(current.karakter, currentString);</span>
+       }
+<span class="fc" id="L73">    }</span>
+   /* static String getHuffmanCode(String data, HashMap&lt;Character, String&gt; characterCodes) {
+        StringBuilder bld = new StringBuilder();
+        char[] charArray = data.toCharArray();
+        for(char karakter : charArray){
+            bld.append(characterCodes.get(karakter));
+        }
+        return bld.toString();
+    }
+*/
+    public static BitSet getHuffmanEncode(String data, HashMap&lt;Character, String&gt; characterCodes) {
+<span class="fc" id="L84">        BitSet bits = new BitSet();</span>
+<span class="fc" id="L85">        int counter = 0;</span>
+<span class="fc bfc" id="L86" title="All 2 branches covered.">        for(char karakter : data.toCharArray()){</span>
+<span class="fc" id="L87">            String coded = (characterCodes.get(karakter));</span>
+<span class="fc bfc" id="L88" title="All 2 branches covered.">            for(char bit : coded.toCharArray()){</span>
+<span class="fc bfc" id="L89" title="All 2 branches covered.">                if(bit == '0')bits.set(counter, false);</span>
+<span class="fc" id="L90">                else bits.set(counter,true);</span>
+<span class="fc" id="L91">                counter++;</span>
+            }
+        }
+<span class="fc" id="L94">        return bits;</span>
+    }
+
+    public static String getHuffmanDecode(BitSet input, HuffKnoop h) {
+<span class="fc" id="L98">        StringBuilder bld = new StringBuilder();</span>
+<span class="fc" id="L99">        HuffKnoop currentKnoop = h;</span>
+<span class="fc bfc" id="L100" title="All 2 branches covered.">        for (int i = 0; i &lt;= input.length(); i++) {</span>
+<span class="fc bfc" id="L101" title="All 2 branches covered.">            if(!input.get(i)){</span>
+<span class="pc bpc" id="L102" title="1 of 2 branches missed.">                if(currentKnoop.leftChild != null){</span>
+<span class="fc" id="L103">                    currentKnoop = currentKnoop.leftChild;</span>
+<span class="pc bpc" id="L104" title="1 of 2 branches missed.">                    if(currentKnoop.leftChild == null){</span>
+<span class="fc" id="L105">                        bld.append(currentKnoop.karakter);</span>
+<span class="fc" id="L106">                        currentKnoop = h;</span>
+                    }
+                }
+            }
+<span class="pc bpc" id="L110" title="1 of 2 branches missed.">            else if(input.get(i)){</span>
+<span class="pc bpc" id="L111" title="1 of 2 branches missed.">                if(currentKnoop.rightChild != null){</span>
+<span class="fc" id="L112">                    currentKnoop = currentKnoop.rightChild;</span>
+<span class="fc bfc" id="L113" title="All 2 branches covered.">                    if(currentKnoop.rightChild == null){</span>
+<span class="fc" id="L114">                        bld.append(currentKnoop.karakter);</span>
+<span class="fc" id="L115">                        currentKnoop = h;</span>
+                    }
+                }
+            }
+        }
+<span class="fc" id="L120">        return bld.toString();</span>
+    }
+    
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

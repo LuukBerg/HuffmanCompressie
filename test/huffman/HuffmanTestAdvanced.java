@@ -6,6 +6,8 @@
 package huffman;
 
 import huffman.Resources.LoremIpsum;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.BitSet;
 import java.util.HashMap;
 import java.util.PriorityQueue;
@@ -193,10 +195,29 @@ public class HuffmanTestAdvanced {
         }
        String expResult = data;
        timer.setBegin("10.000 HuffmanDecode");
-       String result = Huffman.getHuffmanDecode(bld.toString(), h);
+       String result = Huffman.getHuffmanDecode(getBitSet(bld.toString()), h);
        timer.setEnd("10.000 HuffmanDecode");
        assertEquals(expResult,result);
        byte[] bytes = result.getBytes();
        System.out.println("unCoded bytes length: " + bytes.length);
+    }
+    @Test
+    public void writeReadFileTest() throws IOException, FileNotFoundException, ClassNotFoundException {
+        HuffmanIO.writeFile(data, "testA.huff");
+        String result = HuffmanIO.readFile("testA.huff");
+        assertEquals(data, result);
+    }
+    public BitSet getBitSet(String input){
+        BitSet expResult = new BitSet();
+        int counter = 0;
+        for (char bit : input.toCharArray()) {
+            if (bit == '0') {
+                expResult.set(counter, false);
+            } else {
+                expResult.set(counter, true);
+            }
+            counter++;
+        }
+        return expResult;
     }
 }

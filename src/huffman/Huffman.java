@@ -94,11 +94,11 @@ public class Huffman {
         return bits;
     }
 
-    public static String getHuffmanDecode(String input, HuffKnoop h) {
+    public static String getHuffmanDecode(BitSet input, HuffKnoop h) {
         StringBuilder bld = new StringBuilder();
         HuffKnoop currentKnoop = h;
-        for(char kar : input.toCharArray()){
-            if(kar  == '0'){
+        for (int i = 0; i <= input.length(); i++) {
+            if(!input.get(i)){
                 if(currentKnoop.leftChild != null){
                     currentKnoop = currentKnoop.leftChild;
                     if(currentKnoop.leftChild == null){
@@ -107,7 +107,7 @@ public class Huffman {
                     }
                 }
             }
-            else if(kar == '1'){
+            else if(input.get(i)){
                 if(currentKnoop.rightChild != null){
                     currentKnoop = currentKnoop.rightChild;
                     if(currentKnoop.rightChild == null){
@@ -119,4 +119,5 @@ public class Huffman {
         }
         return bld.toString();
     }
+    
 }

@@ -5,11 +5,13 @@
  */
 package huffman;
 
+import java.io.Serializable;
+
 /**
  *
  * @author Luuk
  */
-public class HuffKnoop {
+public class HuffKnoop implements Serializable {
 
     static HuffKnoop create(char c, int i) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>HuffmanIO.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JaCoCoverage analysis of project &quot;Huffman&quot; (powered by JaCoCo from EclEmma)</a> &gt; <a href="index.source.html" class="el_package">huffman</a> &gt; <span class="el_source">HuffmanIO.java</span></div><h1>HuffmanIO.java</h1><pre class="source lang-java linenums">package huffman;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.util.BitSet;
+import java.util.HashMap;
+import java.util.PriorityQueue;
+import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+/**
+ *
+ * @author Luuk
+ */
+<span class="nc" id="L27">public class HuffmanIO {</span>
+    
+    static public void writeFile(String input, String filename) throws FileNotFoundException, IOException{
+<span class="fc" id="L30">        HashMap&lt;Character, Integer&gt; frequenties = Huffman.getFrequentie(input);</span>
+<span class="fc" id="L31">        PriorityQueue&lt;HuffKnoop&gt; priorityFrequentie = Huffman.getPriorityFrequentie(frequenties);</span>
+<span class="fc" id="L32">        HuffKnoop tree = Huffman.getHuffmanBoom(priorityFrequentie);</span>
+<span class="fc" id="L33">        HashMap&lt;Character,String&gt; characterCodes = Huffman.Huffknoopcode(tree);</span>
+<span class="fc" id="L34">        BitSet encoded = Huffman.getHuffmanEncode(input, characterCodes);</span>
+        
+        
+<span class="fc" id="L37">        File outFile = new File(filename);</span>
+<span class="fc" id="L38">        FileOutputStream compressedFile = new FileOutputStream(outFile);</span>
+<span class="fc" id="L39">        ObjectOutputStream oos = new ObjectOutputStream(compressedFile);</span>
+<span class="fc" id="L40">        CompleteObject o = new CompleteObject(tree,encoded);</span>
+<span class="fc" id="L41">        oos.writeObject(o);</span>
+<span class="fc" id="L42">        oos.flush();</span>
+<span class="fc" id="L43">        oos.close();</span>
+<span class="fc" id="L44">    }</span>
+    static public String readFile(String filename) throws FileNotFoundException, IOException, ClassNotFoundException{
+<span class="fc" id="L46">        File inputFile = new File(filename);</span>
+<span class="fc" id="L47">        FileInputStream compressedFile = new FileInputStream(inputFile);</span>
+<span class="fc" id="L48">        ObjectInputStream ois = new ObjectInputStream(compressedFile);</span>
+<span class="fc" id="L49">        CompleteObject o = (CompleteObject)ois.readObject();</span>
+        
+<span class="fc" id="L51">        return Huffman.getHuffmanDecode(o.encoded, o.tree);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

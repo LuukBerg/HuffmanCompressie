@@ -6,6 +6,8 @@
 package huffman;
 
 import huffman.Resources.LoremIpsum;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.BitSet;
 import java.util.HashMap;
 import java.util.PriorityQueue;
@@ -105,9 +107,9 @@ public class HuffmanTestReallyAdvanced {
     public void testGetPriorityFrequentie()
     {
         HashMap<Character, Integer> frequenties = Huffman.getFrequentie(data);
-        timer.setBegin("10.000 PriorityFrequentie");
+        timer.setBegin("100.000 PriorityFrequentie");
         PriorityQueue<HuffKnoop> priorityFrequentie = Huffman.getPriorityFrequentie(frequenties);
-        timer.setEnd("10.000 PriorityFrequentie");
+        timer.setEnd("100.000 PriorityFrequentie");
         HuffKnoop h;
         String frequentieOrder = "hojulrnimesat ";
         for (int i = 0; i < 14; i++) {
@@ -122,9 +124,9 @@ public class HuffmanTestReallyAdvanced {
     {
         HashMap<Character, Integer> frequenties = Huffman.getFrequentie(data);
         PriorityQueue<HuffKnoop> priorityFrequentie = Huffman.getPriorityFrequentie(frequenties);
-        timer.setBegin("10.000 HuffmanBoom");
+        timer.setBegin("100.000 HuffmanBoom");
         HuffKnoop h = Huffman.getHuffmanBoom(priorityFrequentie);
-        timer.setEnd("10.000 HuffmanBoom");
+        timer.setEnd("100.000 HuffmanBoom");
         assertNotNull(h);
         assertEquals('e',h.leftChild.leftChild.leftChild.karakter);
         assertEquals('h',h.leftChild.leftChild.rightChild.leftChild.leftChild.karakter);
@@ -150,9 +152,9 @@ public class HuffmanTestReallyAdvanced {
         HuffKnoop h = Huffman.getHuffmanBoom(priorityFrequentie);
         HashMap<Character, String> expResult =  new HashMap<>();
         expResult = cheatSheet;
-        timer.setBegin("10.000 Huffknoopcode");
+        timer.setBegin("100.000 Huffknoopcode");
         HashMap<Character,String> result = Huffman.Huffknoopcode(h);
-        timer.setEnd("10.000 Huffknoopcode");
+        timer.setEnd("100.000 Huffknoopcode");
         assertEquals(expResult,result);
     }
     
@@ -173,9 +175,9 @@ public class HuffmanTestReallyAdvanced {
                 counter++;
             }
         }
-        timer.setBegin("10.000 HuffmanCode");
+        timer.setBegin("100.000 HuffmanCode");
         BitSet result = Huffman.getHuffmanEncode(data, characterCodes);
-        timer.setEnd("10.000 HuffmanCode");
+        timer.setEnd("100.000 HuffmanCode");
         assertEquals(expResult,result);
         byte[] bytes = result.toByteArray();
         System.out.println("Coded bytes length: " + bytes.length);
@@ -192,11 +194,30 @@ public class HuffmanTestReallyAdvanced {
             bld.append(cheatSheet.get(data.charAt(i)));
         }
        String expResult = data;
-       timer.setBegin("10.000 HuffmanDecode");
-       String result = Huffman.getHuffmanDecode(bld.toString(), h);
-       timer.setEnd("10.000 HuffmanDecode");
+       timer.setBegin("100.000 HuffmanDecode");
+       String result = Huffman.getHuffmanDecode(getBitSet(bld.toString()), h);
+       timer.setEnd("100.000 HuffmanDecode");
        assertEquals(expResult,result);
        byte[] bytes = result.getBytes();
        System.out.println("unCoded bytes length: " + bytes.length);
+    }
+    @Test
+    public void writeReadFileTest() throws IOException, FileNotFoundException, ClassNotFoundException {
+        HuffmanIO.writeFile(data, "testRA.huff");
+        String result = HuffmanIO.readFile("testRA.huff");
+        assertEquals(data, result);
+    }
+    public BitSet getBitSet(String input){
+        BitSet expResult = new BitSet();
+        int counter = 0;
+        for (char bit : input.toCharArray()) {
+            if (bit == '0') {
+                expResult.set(counter, false);
+            } else {
+                expResult.set(counter, true);
+            }
+            counter++;
+        }
+        return expResult;
     }
 }
